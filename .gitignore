@@ -1,0 +1,69 @@
+dist
+node_modules
+*.sqlite
+*.tar*
+docs/examples/**/bin
+docs/examples/**/obj
+.node-red/data/.flows.json.backup
+nodered/package-lock.json
+nodered/package.json
+nodered/*flows.json.backup
+nodered/*cred.json.backup
+nodered/.config*
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# lock-files
+yarn.lock
+
+# build directories
+dist
+dist_test
+
+# auto-generated schemas and documentation
+doc
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# OSX-finder info-files
+*.DS_Store
+
+# IDE configs
+.vscode
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+
+# TestResults
+test/_test_files_results/*.test
+
+# Dotnet
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
