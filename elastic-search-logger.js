@@ -4,21 +4,52 @@ module.exports = function (RED) {
   function LogElasticLoggerNode(config) {
     let winston = require('winston');
     let winstonElasticSearch = require('winston-elasticsearch');
-    let os = require("os");
-    this.hostname = os.hostname();
 
     RED.nodes.createNode(this, config);
     this.logger = null;
     let transports = [];
 
     // Elastic settings
-    let url = config.url;
-    let user = this.credentials.username || '';
-    let password = this.credentials.password || '';
-    let index = this.credentials.index || '';
-    if (index == '') {
-      this.error("Elastic search index is not set");
+    let url = "";
+    if(config.urlType == "global"){
+        url = this.context().global.get(config.url);
+    } else {
+        url = config.url;
     }
+    if (url == "") {
+        this.error("Elastic search url is not set");
+    }
+
+    let user = "";
+    if(config.usernameType == "global") {
+        user = this.context().global.get(this.credentials.username);
+    } else {
+        user = this.credentials.username;
+    }
+    if (user == "") {
+        this.error("Elastic search username is not set");
+    }
+
+    let password = "";
+    if(config.passwordType == "global") {
+        password = this.context().global.get(this.credentials.password);
+    } else {
+        password = this.credentials.password;
+    }
+    if (password == "") {
+        this.error("Elastic search password is not set");
+    }
+
+    let index = "";
+    if(config.indexType == "global") {
+        index = this.context().global.get(this.credentials.index);
+    } else {
+        index = this.credentials.index;
+    }
+    if (index == "") {
+        this.error("Elastic search index is not set");
+    }
+
     index = index.toLowerCase();
     if (url) {
       const elasticSearchTransport = new winstonElasticSearch.ElasticsearchTransport({
@@ -75,8 +106,6 @@ module.exports = function (RED) {
   }
 
   function setElasticFields(logData, node) {
-    logData = mergeFieldsIntoMessage(logData, node);
-
     let { ElasticsearchTransformer } = require('winston-elasticsearch');
     const transformed = ElasticsearchTransformer(logData);
     transformed['@timestamp'] = logData.timestamp ? logData.timestamp : new Date().toISOString();
@@ -104,98 +133,5 @@ module.exports = function (RED) {
 
   LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
     this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
-  }
-
-  // Extract {fields} from message and add them to meta.
-  // Store original message in messageTemplate.
-  // Replace {fields} with values in message.
-  function mergeFieldsIntoMessage(logData, node) {
-    try {
-      if (logData.message == null) {
-        node.error("Message is null");
-        return logData;
-      }
-
-      var fieldNames = extractAllFieldNames(logData);
-      addAllFieldsToMeta(logData, fieldNames);
-      replaceFieldsInMessage(logData, fieldNames);
-      addFixedFieldsToLogData(logData, node);
-    } catch (error) {
-      const serializedLogData = serializeData(logData);
-      node.error(`Error merging fields into message: ${error.message}\nlogData: ${serializedLogData}\nStack trace: ${error.stack}`);
-    }
-
-    return logData;
-  }
-
-  function extractAllFieldNames(logData) {
-    var fieldNames = [];
-    var message = logData.message;
-
-    var index = 0;
-    while (index != -1 && fieldNames.length < logData.meta?.fields?.length) {
-      index = message.indexOf("{", index);
-      if (index != -1) {
-        var endIndex = message.indexOf("}", index);
-        var fieldName = message.substring(index + 1, endIndex);
-        fieldNames.push(fieldName);
-        index = endIndex;
-      }
-    }
-
-    return fieldNames;
-  }
-
-  function addAllFieldsToMeta(logData, fieldNames) {
-    for (var i = 0; i < fieldNames.length; i++) {
-      var fieldName = fieldNames[i];
-      var fieldValue = logData.meta.fields[i];
-
-      if (typeof fieldValue === 'string') {
-        if (fieldValue.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-          logData.meta[fieldName + "_Guid"] = fieldValue;
-        } else {
-          logData.meta[fieldName + "_String"] = fieldValue;
-        }
-      } else if (typeof fieldValue === 'number') {
-        logData.meta[fieldName + "_Number"] = fieldValue;
-      } else if (typeof fieldValue === 'boolean') {
-        logData.meta[fieldName + "_Boolean"] = fieldValue;
-      } else if (typeof fieldValue === 'object' && fieldValue instanceof Date) {
-        logData.meta[fieldName + "_DateTime"] = fieldValue;
-      } else {
-        logData.meta[fieldName] = fieldValue;
-      }
-    }
-  }
-
-  function replaceFieldsInMessage(logData, fieldNames) {
-    // Replace all field names in message with values from fields
-    logData.messageTemplate = logData.message.slice();
-    for (var i = 0; i < fieldNames.length; i++) {
-      var fieldName = fieldNames[i];
-      var fieldValue = logData.meta.fields[i];
-      var replacement = typeof fieldValue === 'string' ? "'" + fieldValue + "'" : fieldValue;
-      logData.message = logData.message.replace("{" + fieldName + "}", replacement);
-    }
-
-    // Remove fields from meta
-    delete logData.meta.fields;
-  }
-
-  function addFixedFieldsToLogData(logData, node) {
-    logData.meta['Origin_String'] = 'Node-RED';
-    logData.meta['MachineName_String'] = node.hostname;
-  }
-
-  function serializeData(data) {
-    return JSON.stringify(data, (key, value) => {
-      if (typeof value === 'object' && value !== null && value !== undefined) {
-        if (value instanceof Date) {
-          return value.toISOString();
-        }
-      }
-      return value;
-    }, 2);
   }
 };
