@@ -10,42 +10,22 @@ module.exports = function (RED) {
     let transports = [];
 
     // Elastic settings
-    let url = "";
-    if(config.urlType == "global"){
-        url = this.context().global.get(config.url);
-    } else {
-        url = config.url;
-    }
+    let url = RED.util.evaluateNodeProperty(config.url, config.urlType, this);
     if (url == "") {
         this.error("Elastic search url is not set");
     }
 
-    let user = "";
-    if(config.usernameType == "global") {
-        user = this.context().global.get(this.credentials.username);
-    } else {
-        user = this.credentials.username;
-    }
+    let user = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, this);
     if (user == "") {
         this.error("Elastic search username is not set");
     }
 
-    let password = "";
-    if(config.passwordType == "global") {
-        password = this.context().global.get(this.credentials.password);
-    } else {
-        password = this.credentials.password;
-    }
+    let password = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, this);
     if (password == "") {
         this.error("Elastic search password is not set");
     }
 
-    let index = "";
-    if(config.indexType == "global") {
-        index = this.context().global.get(this.credentials.index);
-    } else {
-        index = this.credentials.index;
-    }
+    let index = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, this);
     if (index == "") {
         this.error("Elastic search index is not set");
     }
