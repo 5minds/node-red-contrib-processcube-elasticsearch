@@ -152,7 +152,20 @@ module.exports = function (RED) {
         },
     });
 
-    LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
-        if (!lock && this.logger) this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
+    LogElasticLoggerNode.prototype.addToLog = function addToLog(loglevel, msg) {
+        let attempt = 0;
+
+        const tryLog = () => {
+            if (!lock && this.logger) {
+                this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
+            } else if (attempt < 5) {
+                attempt++;
+                setTimeout(tryLog, 10);
+            } else {
+                this.error('Failed to log message after multiple attempts due to logger lock.');
+            }
+        };
+
+        tryLog();
     };
 };
