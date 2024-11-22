@@ -1,6 +1,8 @@
 module.exports = function (RED) {
     'use strict';
 
+    let lock = false;
+
     function LogElasticLoggerNode(config) {
         let winston = require('winston');
         let winstonElasticSearch = require('winston-elasticsearch');
@@ -15,6 +17,8 @@ module.exports = function (RED) {
             let url, user, password, index;
 
             function refresh() {
+                if (lock) return;
+
                 // Elastic settings
                 let newUrl = RED.util.evaluateNodeProperty(config.url, config.urlType, this);
                 if (newUrl == '') {
@@ -43,8 +47,6 @@ module.exports = function (RED) {
                 if (newUrl === url && newUser === user && newPassword === password && newIndex === index) {
                     return;
                 }
-
-                if (this.logger) this.logger.close();
 
                 url = newUrl;
                 user = newUser;
@@ -85,12 +87,23 @@ module.exports = function (RED) {
                         Debug: 3,
                     },
                 };
-                this.logger = new winston.createLogger({
+
+                const newLogger = new winston.createLogger({
                     exitOnError: false,
                     level: 'Debug',
                     levels: logLevels.levels,
                     transports: transports,
                 });
+
+                lock = true;
+
+                try {
+                    if (this.logger) this.logger.close();
+
+                    this.logger = newLogger;
+                } finally {
+                    lock = false;
+                }
 
                 this.debug('elastic-search logger created');
             }
@@ -140,6 +153,6 @@ module.exports = function (RED) {
     });
 
     LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
-        this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
+        if (!lock && this.logger) this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
     };
 };
