@@ -1,20 +1,20 @@
 module.exports = function (RED) {
-    "use strict";
+    'use strict';
 
-    const Error = "Error"
-    const Warning = "Warning"
-    const Information = "Information"
-    const Debug = "Debug"
+    const Error = 'Error';
+    const Warning = 'Warning';
+    const Information = 'Information';
+    const Debug = 'Debug';
 
     function LogElasticNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        this.logger = RED.nodes.getNode(config.logger);
-
-        let loglevel = config.loglevel || "";
-
         this.on('input', function (msg, send, done) {
+            node.logger = RED.nodes.getNode(config.logger);
+
+            let loglevel = config.loglevel || '';
+
             if (node.logger) {
                 let level;
                 if (loglevel === Error || loglevel === Warning || loglevel === Information || loglevel === Debug) {
@@ -22,8 +22,9 @@ module.exports = function (RED) {
                     level = loglevel;
                 } else {
                     // get loglevel from message
-                    try { level = RED.util.getMessageProperty(msg, loglevel); }
-                    catch (err) {
+                    try {
+                        level = RED.util.getMessageProperty(msg, loglevel);
+                    } catch (err) {
                         level = Debug;
                     }
 
@@ -40,5 +41,5 @@ module.exports = function (RED) {
         });
     }
 
-    RED.nodes.registerType("elastic-search", LogElasticNode);
+    RED.nodes.registerType('elastic-search', LogElasticNode);
 };
