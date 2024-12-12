@@ -36,7 +36,7 @@
             // URL
             $('#node-config-input-url').typedInput({
                 type: this.urlType,
-                types: ['str', 'cred', 'env'],
+                types: ['str', 'env'],
                 typeField: '#node-config-input-urlType',
                 value: this.url,
             });
@@ -60,7 +60,7 @@
             // Index
             $('#node-config-input-index').typedInput({
                 type: this.indexType,
-                types: ['str', 'cred', 'env'],
+                types: ['str', 'env'],
                 typeField: '#node-config-input-indexType',
                 value: this.credentials.index,
             });
@@ -89,7 +89,7 @@
         </div>
         <div class="form-row" style="padding-left:20px;">
             <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
-            <input type="password" id="node-config-input-password" />
+            <input type="text" id="node-config-input-password" />
             <input type="hidden" id="node-config-input-passwordType" />
         </div>
         <div class="form-row" style="padding-left:20px;">
