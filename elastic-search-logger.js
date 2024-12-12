@@ -1,8 +1,6 @@
 module.exports = function (RED) {
     'use strict';
 
-    let lock = false;
-
     function LogElasticLoggerNode(config) {
         let winston = require('winston');
         let winstonElasticSearch = require('winston-elasticsearch');
@@ -11,113 +9,73 @@ module.exports = function (RED) {
         this.logger = null;
         let transports = [];
 
-        const stopRefreshing = periodicallyRefreshElasticSettings(10000);
-
-        function periodicallyRefreshElasticSettings(timeOut) {
-            let url, user, password, index;
-
-            function refresh() {
-                if (lock) return;
-
-                // Elastic settings
-                let newUrl = RED.util.evaluateNodeProperty(config.url, config.urlType, this);
-                if (newUrl == '') {
-                    this.error('Elastic search url is not set');
-                    return;
-                }
-
-                let newUser = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, this);
-                if (newUser == '') {
-                    this.error('Elastic search username is not set');
-                    return;
-                }
-
-                let newPassword = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, this);
-                if (newPassword == '') {
-                    this.error('Elastic search password is not set');
-                    return;
-                }
-
-                let newIndex = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, this);
-                if (newIndex == '') {
-                    this.error('Elastic search index is not set');
-                    return;
-                }
-
-                if (newUrl === url && newUser === user && newPassword === password && newIndex === index) {
-                    return;
-                }
-
-                url = newUrl;
-                user = newUser;
-                password = newPassword;
-                index = newIndex;
-
-                index = index.toLowerCase();
-                if (url) {
-                    const elasticSearchTransport = new winstonElasticSearch.ElasticsearchTransport({
-                        clientOpts: {
-                            node: url,
-                            auth: {
-                                username: user,
-                                password: password,
-                            },
-                            ssl: {
-                                // accept any
-                                rejectUnauthorized: false,
-                            },
-                        },
-                        transformer: (logData) => setElasticFields(logData, this),
-                        index: index,
-                    });
-
-                    transports = [elasticSearchTransport];
-
-                    elasticSearchTransport.on('error', (error) => {
-                        this.error(`Error in elasticSearchTransport caught: ${error.message}`);
-                        console.error('Error in elasticSearchTransport caught', error);
-                    });
-                }
-
-                let logLevels = {
-                    levels: {
-                        Error: 0,
-                        Warning: 1,
-                        Information: 2,
-                        Debug: 3,
-                    },
-                };
-
-                const newLogger = new winston.createLogger({
-                    exitOnError: false,
-                    level: 'Debug',
-                    levels: logLevels.levels,
-                    transports: transports,
-                });
-
-                lock = true;
-
-                try {
-                    if (this.logger) this.logger.close();
-
-                    this.logger = newLogger;
-                } finally {
-                    lock = false;
-                }
-
-                this.debug('elastic-search logger created');
-            }
-
-            refresh();
-            const intervalId = setInterval(refresh, timeOut);
-
-            return () => clearInterval(intervalId);
+        // Elastic settings
+        let url = RED.util.evaluateNodeProperty(config.url, config.urlType, this);
+        if (url == '') {
+            this.error('Elastic search url is not set');
         }
 
+        let user = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, this);
+        if (user == '') {
+            this.error('Elastic search username is not set');
+        }
+
+        let password = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, this);
+        if (password == '') {
+            this.error('Elastic search password is not set');
+        }
+
+        let index = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, this);
+        if (index == '') {
+            this.error('Elastic search index is not set');
+        }
+
+        index = index.toLowerCase();
+        if (url) {
+            const elasticSearchTransport = new winstonElasticSearch.ElasticsearchTransport({
+                clientOpts: {
+                    node: url,
+                    auth: {
+                        username: user,
+                        password: password,
+                    },
+                    ssl: {
+                        // accept any
+                        rejectUnauthorized: false,
+                    },
+                },
+                transformer: (logData) => setElasticFields(logData, this),
+                index: index,
+            });
+
+            transports.push(elasticSearchTransport);
+
+            elasticSearchTransport.on('error', (error) => {
+                this.error(`Error in elasticSearchTransport caught: ${error.message}`);
+                console.error('Error in elasticSearchTransport caught', error);
+            });
+        }
+
+        let logLevels = {
+            levels: {
+                Error: 0,
+                Warning: 1,
+                Information: 2,
+                Debug: 3,
+            },
+        };
+        this.logger = new winston.createLogger({
+            exitOnError: false,
+            level: 'Debug',
+            levels: logLevels.levels,
+            transports: transports,
+        });
+
+        this.debug('elastic-search logger created');
+
         this.on('close', function (removed, done) {
-            stopRefreshing();
             // close logger
-            if (this.logger) {
+            if (this.loggger) {
                 this.logger.close();
             }
 
@@ -152,20 +110,7 @@ module.exports = function (RED) {
         },
     });
 
-    LogElasticLoggerNode.prototype.addToLog = function addToLog(loglevel, msg) {
-        let attempt = 0;
-
-        const tryLog = () => {
-            if (!lock && this.logger) {
-                this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
-            } else if (attempt < 5) {
-                attempt++;
-                setTimeout(tryLog, 10);
-            } else {
-                this.error('Failed to log message after multiple attempts due to logger lock.');
-            }
-        };
-
-        tryLog();
+    LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
+        this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
     };
 };
