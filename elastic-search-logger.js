@@ -15,29 +15,29 @@ module.exports = function (RED) {
             this.error('Elastic search url is not set');
         }
 
-        let user = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, this);
-        if (user == '') {
+        this.credentials.username = RED.util.evaluateNodeProperty(config.username, config.usernameType, this);
+        if (this.credentials.username == '') {
             this.error('Elastic search username is not set');
         }
 
-        let password = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, this);
-        if (password == '') {
+        this.credentials.password = RED.util.evaluateNodeProperty(config.password, config.passwordType, this);
+        if (this.credentials.password == '') {
             this.error('Elastic search password is not set');
         }
 
-        let index = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, this);
-        if (index == '') {
+        this.credentials.index = RED.util.evaluateNodeProperty(config.index, config.indexType, this);
+        if (this.credentials.index == '') {
             this.error('Elastic search index is not set');
         }
 
-        index = index.toLowerCase();
+        this.credentials.index = this.credentials.index.toLowerCase();
         if (url) {
             const elasticSearchTransport = new winstonElasticSearch.ElasticsearchTransport({
                 clientOpts: {
-                    node: url,
+                    node: this.credentials.url,
                     auth: {
-                        username: user,
-                        password: password,
+                        username: this.credentials.username,
+                        password: this.credentials.password,
                     },
                     ssl: {
                         // accept any
@@ -45,7 +45,7 @@ module.exports = function (RED) {
                     },
                 },
                 transformer: (logData) => setElasticFields(logData, this),
-                index: index,
+                index: this.credentials.index,
             });
 
             transports.push(elasticSearchTransport);
