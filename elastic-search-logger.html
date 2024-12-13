@@ -1,17 +1,15 @@
 <script type="text/javascript">
     RED.nodes.registerType('elastic-search-logger', {
         category: 'config',
-        credentials: {
-            username: { type: 'text' },
-            password: { type: 'password' },
-            index: { type: 'text' },
-        },
         defaults: {
             name: { value: '' },
-            url: { value: 'http://localhost:9200' },
+            url: { value: 'http://engine:8000' },
             urlType: { value: 'str' },
+            username: { value: '' },
             usernameType: { value: 'str' },
+            password: { value: '' },
             passwordType: { value: 'str' },
+            index: { value: '' },
             indexType: { value: 'str' },
             filename: { value: 'log-elastic.log', required: true },
             maxsize: {
@@ -35,35 +33,52 @@
         oneditprepare: function () {
             // URL
             $('#node-config-input-url').typedInput({
-                type: this.urlType,
+                default: 'str',
                 types: ['str', 'env'],
-                typeField: '#node-config-input-urlType',
-                value: this.url,
             });
 
             // Username
             $('#node-config-input-username').typedInput({
-                type: this.usernameType,
-                types: ['str', 'cred', 'env'],
-                typeField: '#node-config-input-usernameType',
-                value: this.credentials.username,
+                default: 'str',
+                types: ['str', 'env'],
             });
 
             // Password
             $('#node-config-input-password').typedInput({
-                type: this.passwordType,
-                types: ['str', 'cred', 'env'],
-                typeField: '#node-config-input-passwordType',
-                value: this.credentials.password,
+                default: 'str',
+                types: ['str', 'env'],
             });
 
             // Index
             $('#node-config-input-index').typedInput({
-                type: this.indexType,
+                default: 'str',
                 types: ['str', 'env'],
-                typeField: '#node-config-input-indexType',
-                value: this.credentials.index,
             });
+
+            $('#node-config-input-url').typedInput('value', this.url);
+            $('#node-config-input-url').typedInput('type', this.urlType);
+
+            $('#node-config-input-username').typedInput('value', this.username);
+            $('#node-config-input-username').typedInput('type', this.usernameType);
+
+            $('#node-config-input-password').typedInput('value', this.password);
+            $('#node-config-input-password').typedInput('type', this.passwordType);
+
+            $('#node-config-input-index').typedInput('value', this.index);
+            $('#node-config-input-index').typedInput('type', this.indexType);
+        },
+        oneditsave: function () {
+            this.url = $('#node-config-input-url').typedInput('value');
+            this.urlType = $('#node-config-input-url').typedInput('type');
+
+            this.username = $('#node-config-input-username').typedInput('value');
+            this.usernameType = $('#node-config-input-username').typedInput('type');
+
+            this.password = $('#node-config-input-password').typedInput('value');
+            this.passwordType = $('#node-config-input-password').typedInput('type');
+
+            this.index = $('#node-config-input-index').typedInput('value');
+            this.indexType = $('#node-config-input-index').typedInput('type');
         },
     });
 </script>
@@ -80,22 +95,18 @@
         <div class="form-row" style="padding-left:20px;">
             <label for="node-config-input-url"><i class="fa fa-plug"></i> Elastic URL</label>
             <input type="text" id="node-config-input-url" />
-            <input type="hidden" id="node-config-input-urlType" />
         </div>
         <div class="form-row" style="padding-left:20px;">
             <label for="node-config-input-username"><i class="fa fa-user"></i> Username</label>
             <input type="text" id="node-config-input-username" />
-            <input type="hidden" id="node-config-input-usernameType" />
         </div>
         <div class="form-row" style="padding-left:20px;">
             <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
             <input type="text" id="node-config-input-password" />
-            <input type="hidden" id="node-config-input-passwordType" />
         </div>
         <div class="form-row" style="padding-left:20px;">
             <label for="node-config-input-index"><i class="fa fa-tag"></i> Index</label>
             <input type="text" id="node-config-input-index" />
-            <input type="hidden" id="node-config-input-indexType" />
         </div>
     </div>
 </script>
