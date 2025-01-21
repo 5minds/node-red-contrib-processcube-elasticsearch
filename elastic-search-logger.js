@@ -1,36 +1,81 @@
+'use strict';
+
+const winston = require('winston');
+const winstonElasticSearch = require('winston-elasticsearch');
+const { ElasticsearchTransformer } = require('winston-elasticsearch');
+
+const logLevels = {
+    levels: {
+        Error: 0,
+        Warning: 1,
+        Information: 2,
+        Debug: 3
+    }
+};
+
+function setElasticFields(logData) {
+    const transformed = ElasticsearchTransformer(logData);
+    
+    transformed['@timestamp'] = logData.timestamp ? logData.timestamp : new Date().toISOString();
+    transformed.message = logData.message;
+    transformed.messageTemplate = logData.messageTemplate;
+    transformed.severity = logData.level;
+    transformed.level = logData.level;
+    transformed.fields = logData.meta;
+
+    if (logData.meta['transaction.id']) {
+        transformed.transaction = { id: logData.meta['transaction.id'] };
+    }
+
+    if (logData.meta['trace.id']) {
+        transformed.trace = { 
+            id: logData.meta['trace.id'] 
+        };
+    }
+
+    if (logData.meta['span.id']) {
+        transformed.span = { 
+            id: logData.meta['span.id']
+        };
+    }
+
+    return transformed;
+}
+
+
 module.exports = function (RED) {
-    'use strict';
 
     function LogElasticLoggerNode(config) {
-        let winston = require('winston');
-        let winstonElasticSearch = require('winston-elasticsearch');
-
         RED.nodes.createNode(this, config);
-        this.logger = null;
-        let transports = [];
+        const node = this;
+
+        node.logger = null;
 
         // Elastic settings
-        let url = RED.util.evaluateNodeProperty(config.url, config.urlType, this);
+        const url = RED.util.evaluateNodeProperty(config.url, config.urlType, node);
         if (url == '') {
-            this.error('Elastic search url is not set');
+            node.error('Elastic search url is not set', {});
         }
 
-        let user = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, this);
+        const user = RED.util.evaluateNodeProperty(this.credentials.username, config.usernameType, node);
         if (user == '') {
-            this.error('Elastic search username is not set');
+            node.error('Elastic search username is not set', {});
         }
 
-        let password = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, this);
+        const password = RED.util.evaluateNodeProperty(this.credentials.password, config.passwordType, node);
         if (password == '') {
-            this.error('Elastic search password is not set');
+            node.error('Elastic search password is not set', {});
         }
 
-        let index = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, this);
+        let index = RED.util.evaluateNodeProperty(this.credentials.index, config.indexType, node);
         if (index == '') {
-            this.error('Elastic search index is not set');
+            node.error('Elastic search index is not set', {});
+        } else {
+            index = index.toLowerCase();
         }
 
-        index = index.toLowerCase();
+        let transports = [];
+
         if (url) {
             const elasticSearchTransport = new winstonElasticSearch.ElasticsearchTransport({
                 clientOpts: {
@@ -44,26 +89,23 @@ module.exports = function (RED) {
                         rejectUnauthorized: false,
                     },
                 },
-                transformer: (logData) => setElasticFields(logData, this),
+                transformer: (logData) => {
+                    try {
+                        setElasticFields(logData);
+                    } catch (error) {
+                        node.error(error, {});
+                    }
+                },
                 index: index,
             });
 
             transports.push(elasticSearchTransport);
 
             elasticSearchTransport.on('error', (error) => {
-                this.error(`Error in elasticSearchTransport caught: ${error.message}`);
-                console.error('Error in elasticSearchTransport caught', error);
+                node.error(`Error in elasticSearchTransport caught: ${error.message}`, {});                
             });
         }
 
-        let logLevels = {
-            levels: {
-                Error: 0,
-                Warning: 1,
-                Information: 2,
-                Debug: 3,
-            },
-        };
         this.logger = new winston.createLogger({
             exitOnError: false,
             level: 'Debug',
@@ -71,36 +113,29 @@ module.exports = function (RED) {
             transports: transports,
         });
 
+        this.logger.on('error', (error) => {
+            node.error(error, {});
+        });
+
         this.debug('elastic-search logger created');
 
-        this.on('close', function (removed, done) {
+        this.on('close', function () {
             // close logger
-            if (this.loggger) {
-                this.logger.close();
+            if (node.logger) {
+                node.logger.close();
             }
 
-            this.debug('elastic-search logger closed');
-
-            if (done) done();
+            node.debug('elastic-search logger closed');
         });
     }
 
-    function setElasticFields(logData, node) {
-        let { ElasticsearchTransformer } = require('winston-elasticsearch');
-        const transformed = ElasticsearchTransformer(logData);
-        transformed['@timestamp'] = logData.timestamp ? logData.timestamp : new Date().toISOString();
-        transformed.message = logData.message;
-        transformed.messageTemplate = logData.messageTemplate;
-        transformed.severity = logData.level;
-        transformed.level = logData.level;
-        transformed.fields = logData.meta;
-
-        if (logData.meta['transaction.id']) transformed.transaction = { id: logData.meta['transaction.id'] };
-        if (logData.meta['trace.id']) transformed.trace = { id: logData.meta['trace.id'] };
-        if (logData.meta['span.id']) transformed.span = { id: logData.meta['span.id'] };
-
-        return transformed;
-    }
+    LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
+        try {
+            this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
+        } catch (error) {
+            this.error(error, msg);
+        }
+    };
 
     RED.nodes.registerType('elastic-search-logger', LogElasticLoggerNode, {
         credentials: {
@@ -109,8 +144,4 @@ module.exports = function (RED) {
             index: { type: 'text' },
         },
     });
-
-    LogElasticLoggerNode.prototype.addToLog = function addTolog(loglevel, msg) {
-        this.logger.log(loglevel, msg.payload.message, msg.payload.meta);
-    };
 };

@@ -9,5 +9,12 @@ try {
     console.log(">>>", e);
 }
 
+process.on('uncaughtException', (err) => {
+    console.error(`Uncaught Exception: ${err}`, {});
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error(`Unhandled Rejection at ${promise} reason: ${reason}`, {});
+});    
 
 module.exports = config;
