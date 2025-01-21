@@ -136,10 +136,73 @@
         "h": 142
     },
     {
+        "id": "38edcaecf5968ff5",
+        "type": "group",
+        "z": "53b75a173ac5abcc",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "0b2f670fec931f5f",
+            "443b329ab591c4dd",
+            "f4a0d7de5d04c121",
+            "946add545fa1db9f",
+            "0c15060915aac994"
+        ],
+        "x": 34,
+        "y": 19,
+        "w": 372,
+        "h": 202
+    },
+    {
+        "id": "4aae454884faa826",
+        "type": "group",
+        "z": "53b75a173ac5abcc",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "f90f2ba54f023834",
+            "31dcfc340dae3780",
+            "59df2485b6c11412",
+            "b7af3faf5fc209b0",
+            "361a7b4182fb9167"
+        ],
+        "x": 34,
+        "y": 259,
+        "w": 382,
+        "h": 202
+    },
+    {
         "id": "e8672d361683672d",
         "type": "elastic-search-logger",
         "name": "Docker compose",
         "url": "http://elasticsearch:9200",
+        "urlType": "str",
+        "usernameType": "str",
+        "passwordType": "str",
+        "indexType": "str",
+        "filename": "log-elastic.log",
+        "maxsize": 1,
+        "maxfiles": 2
+    },
+    {
+        "id": "3667972f5cb77061",
+        "type": "elastic-search-logger",
+        "name": "Failed docker compose",
+        "url": "",
         "urlType": "str",
         "usernameType": "str",
         "passwordType": "str",
@@ -530,24 +593,24 @@
         "id": "0b2f670fec931f5f",
         "type": "elastic-search",
         "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
         "name": "",
         "logger": "e8672d361683672d",
         "complete": "payload",
         "loglevel": "Debug",
-        "x": 320,
-        "y": 100,
+        "x": 300,
+        "y": 120,
         "wires": []
     },
     {
         "id": "443b329ab591c4dd",
         "type": "inject",
         "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
         "name": "",
         "props": [
             {
-                "p": "message",
-                "v": "hello world",
-                "vt": "str"
+                "p": "payload"
             }
         ],
         "repeat": "",
@@ -555,12 +618,142 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
+        "payload": "{\"message\":\"hello world\"}",
+        "payloadType": "json",
         "x": 130,
-        "y": 100,
+        "y": 120,
         "wires": [
             [
                 "0b2f670fec931f5f"
             ]
         ]
+    },
+    {
+        "id": "f4a0d7de5d04c121",
+        "type": "comment",
+        "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
+        "name": "Handle log",
+        "info": "",
+        "x": 120,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "946add545fa1db9f",
+        "type": "catch",
+        "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 120,
+        "y": 180,
+        "wires": [
+            [
+                "0c15060915aac994"
+            ]
+        ]
+    },
+    {
+        "id": "0c15060915aac994",
+        "type": "debug",
+        "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 270,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "f90f2ba54f023834",
+        "type": "elastic-search",
+        "z": "53b75a173ac5abcc",
+        "g": "4aae454884faa826",
+        "name": "",
+        "logger": "3667972f5cb77061",
+        "complete": "payload",
+        "loglevel": "Debug",
+        "x": 300,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "31dcfc340dae3780",
+        "type": "inject",
+        "z": "53b75a173ac5abcc",
+        "g": "4aae454884faa826",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"message\":\"hello world\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 360,
+        "wires": [
+            [
+                "f90f2ba54f023834"
+            ]
+        ]
+    },
+    {
+        "id": "59df2485b6c11412",
+        "type": "comment",
+        "z": "53b75a173ac5abcc",
+        "g": "4aae454884faa826",
+        "name": "Handle failed log",
+        "info": "",
+        "x": 140,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b7af3faf5fc209b0",
+        "type": "catch",
+        "z": "53b75a173ac5abcc",
+        "g": "4aae454884faa826",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 120,
+        "y": 420,
+        "wires": [
+            [
+                "361a7b4182fb9167"
+            ]
+        ]
+    },
+    {
+        "id": "361a7b4182fb9167",
+        "type": "debug",
+        "z": "53b75a173ac5abcc",
+        "g": "4aae454884faa826",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 420,
+        "wires": []
     }
 ]
