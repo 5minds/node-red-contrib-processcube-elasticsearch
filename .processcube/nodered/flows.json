@@ -1,0 +1,566 @@
+[
+    {
+        "id": "7981e8890a543dd5",
+        "type": "tab",
+        "label": "Elastic mit http-node",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "53b75a173ac5abcc",
+        "type": "tab",
+        "label": "Elasticsearch loggen",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d35cb40208b209e1",
+        "type": "group",
+        "z": "7981e8890a543dd5",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "95fa4d376d072354",
+            "42a913bcdf75d6df",
+            "016f7422ded25fac",
+            "d37c6c2e3f2fd13b"
+        ],
+        "x": 34,
+        "y": 19,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "f8a26a09f7a6d0a0",
+        "type": "group",
+        "z": "7981e8890a543dd5",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "b12198813a3a0d13",
+            "62dc26df1aa4b20e",
+            "66442d4d2da7b5f1",
+            "134d7c6559d92660"
+        ],
+        "x": 34,
+        "y": 199,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "30a38c6b516da6aa",
+        "type": "group",
+        "z": "7981e8890a543dd5",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "a94519a287ab5691",
+            "a03862d06661a1b7",
+            "baeec929489f719f",
+            "1b0fe91b9732028b"
+        ],
+        "x": 34,
+        "y": 379,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "2c10f13d9bc5da5d",
+        "type": "group",
+        "z": "7981e8890a543dd5",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "bb866b012afbc73c",
+            "860403e22a1eeb2d",
+            "209b9637f58048f7",
+            "59b75b9850eb2758"
+        ],
+        "x": 34,
+        "y": 559,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "2b1466524ddc1c7a",
+        "type": "group",
+        "z": "7981e8890a543dd5",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "59a83ed130f969e1",
+            "e0f27e32740dbc0b",
+            "a70abdea4c2bb1ee",
+            "c49afe4c415af8c8"
+        ],
+        "x": 34,
+        "y": 739,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "e8672d361683672d",
+        "type": "elastic-search-logger",
+        "name": "Docker compose",
+        "url": "http://elasticsearch:9200",
+        "urlType": "str",
+        "usernameType": "str",
+        "passwordType": "str",
+        "indexType": "str",
+        "filename": "log-elastic.log",
+        "maxsize": 1,
+        "maxfiles": 2
+    },
+    {
+        "id": "95fa4d376d072354",
+        "type": "http request",
+        "z": "7981e8890a543dd5",
+        "g": "d35cb40208b209e1",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://elasticsearch:9200",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "42a913bcdf75d6df"
+            ]
+        ]
+    },
+    {
+        "id": "42a913bcdf75d6df",
+        "type": "debug",
+        "z": "7981e8890a543dd5",
+        "g": "d35cb40208b209e1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "016f7422ded25fac",
+        "type": "inject",
+        "z": "7981e8890a543dd5",
+        "g": "d35cb40208b209e1",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "95fa4d376d072354"
+            ]
+        ]
+    },
+    {
+        "id": "b12198813a3a0d13",
+        "type": "inject",
+        "z": "7981e8890a543dd5",
+        "g": "f8a26a09f7a6d0a0",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "62dc26df1aa4b20e"
+            ]
+        ]
+    },
+    {
+        "id": "62dc26df1aa4b20e",
+        "type": "http request",
+        "z": "7981e8890a543dd5",
+        "g": "f8a26a09f7a6d0a0",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://elasticsearch:9200/my-index",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 300,
+        "wires": [
+            [
+                "66442d4d2da7b5f1"
+            ]
+        ]
+    },
+    {
+        "id": "66442d4d2da7b5f1",
+        "type": "debug",
+        "z": "7981e8890a543dd5",
+        "g": "f8a26a09f7a6d0a0",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d37c6c2e3f2fd13b",
+        "type": "comment",
+        "z": "7981e8890a543dd5",
+        "g": "d35cb40208b209e1",
+        "name": "Infos von ElasticSearch abfragen",
+        "info": "",
+        "x": 190,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "134d7c6559d92660",
+        "type": "comment",
+        "z": "7981e8890a543dd5",
+        "g": "f8a26a09f7a6d0a0",
+        "name": "Index 'my-index' anlegen",
+        "info": "",
+        "x": 170,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a94519a287ab5691",
+        "type": "inject",
+        "z": "7981e8890a543dd5",
+        "g": "30a38c6b516da6aa",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 480,
+        "wires": [
+            [
+                "a03862d06661a1b7"
+            ]
+        ]
+    },
+    {
+        "id": "a03862d06661a1b7",
+        "type": "http request",
+        "z": "7981e8890a543dd5",
+        "g": "30a38c6b516da6aa",
+        "name": "",
+        "method": "DELETE",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://elasticsearch:9200/my-index",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 480,
+        "wires": [
+            [
+                "baeec929489f719f"
+            ]
+        ]
+    },
+    {
+        "id": "baeec929489f719f",
+        "type": "debug",
+        "z": "7981e8890a543dd5",
+        "g": "30a38c6b516da6aa",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "1b0fe91b9732028b",
+        "type": "comment",
+        "z": "7981e8890a543dd5",
+        "g": "30a38c6b516da6aa",
+        "name": "Index 'my-index' löschen",
+        "info": "",
+        "x": 170,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "bb866b012afbc73c",
+        "type": "inject",
+        "z": "7981e8890a543dd5",
+        "g": "2c10f13d9bc5da5d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"name\":\"ProcessCube\",\"since\":2009,\"email\":\"processcube@5minds.de\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 660,
+        "wires": [
+            [
+                "860403e22a1eeb2d"
+            ]
+        ]
+    },
+    {
+        "id": "860403e22a1eeb2d",
+        "type": "http request",
+        "z": "7981e8890a543dd5",
+        "g": "2c10f13d9bc5da5d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://elasticsearch:9200/my-index/_doc",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Content-Type",
+                "valueType": "other",
+                "valueValue": "application/json"
+            }
+        ],
+        "x": 290,
+        "y": 660,
+        "wires": [
+            [
+                "209b9637f58048f7"
+            ]
+        ]
+    },
+    {
+        "id": "209b9637f58048f7",
+        "type": "debug",
+        "z": "7981e8890a543dd5",
+        "g": "2c10f13d9bc5da5d",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "59b75b9850eb2758",
+        "type": "comment",
+        "z": "7981e8890a543dd5",
+        "g": "2c10f13d9bc5da5d",
+        "name": "Im Index 'my-index' eintragen",
+        "info": "",
+        "x": 180,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "59a83ed130f969e1",
+        "type": "inject",
+        "z": "7981e8890a543dd5",
+        "g": "2b1466524ddc1c7a",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 840,
+        "wires": [
+            [
+                "e0f27e32740dbc0b"
+            ]
+        ]
+    },
+    {
+        "id": "e0f27e32740dbc0b",
+        "type": "http request",
+        "z": "7981e8890a543dd5",
+        "g": "2b1466524ddc1c7a",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://elasticsearch:9200/my-index/_search",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 840,
+        "wires": [
+            [
+                "a70abdea4c2bb1ee"
+            ]
+        ]
+    },
+    {
+        "id": "a70abdea4c2bb1ee",
+        "type": "debug",
+        "z": "7981e8890a543dd5",
+        "g": "2b1466524ddc1c7a",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "c49afe4c415af8c8",
+        "type": "comment",
+        "z": "7981e8890a543dd5",
+        "g": "2b1466524ddc1c7a",
+        "name": "Index 'my-index' anzeigen",
+        "info": "",
+        "x": 170,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "0b2f670fec931f5f",
+        "type": "elastic-search",
+        "z": "53b75a173ac5abcc",
+        "name": "",
+        "logger": "e8672d361683672d",
+        "complete": "payload",
+        "loglevel": "Debug",
+        "x": 320,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "443b329ab591c4dd",
+        "type": "inject",
+        "z": "53b75a173ac5abcc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"message\":\"hello world\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "0b2f670fec931f5f"
+            ]
+        ]
+    }
+]

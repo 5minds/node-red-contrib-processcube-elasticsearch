@@ -1,0 +1,38 @@
+services:
+  nodered:
+    image: 5minds/processcube_lowcode_auth:dev
+    build:
+      context: .
+    ports:
+      # node-red port
+      - 1880:1880
+      # debugger port
+      - 9229:9229
+    environment:
+      # start node-red with debugger port open
+      NODE_OPTIONS: --inspect=0.0.0.0:9229
+    volumes:
+      # required for mapping the current source into the directory
+      - ./.:/package_src/
+      # save the flows
+      - ./.processcube/nodered:/data
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+     # - ELASTIC_PASSWORD=myelasticpassword
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    restart: always
+
+volumes:
+  es_data:
+    driver: local
