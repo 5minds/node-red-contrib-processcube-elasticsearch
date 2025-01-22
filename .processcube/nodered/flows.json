@@ -616,7 +616,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"message\":\"hello world\"}",
+        "payload": "{\"message\":\"hello world\",\"meta\":{\"message\":\"a message\",\"messageTemplate\":\"a messageTemplate\",\"severity\":\"a severity\",\"level\":\"a level\",\"fields\":{\"firstField\":\"a FirstField\",\"secondField\":\"a SecondField\"},\"transaction.id\":\"a transaction.id\",\"trace.id\":\"a trace.id\",\"span.id\":\"a span.id\"}}",
         "payloadType": "json",
         "x": 130,
         "y": 120,
