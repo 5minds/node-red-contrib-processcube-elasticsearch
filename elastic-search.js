@@ -10,7 +10,7 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        this.on('input', function (msg, send, done) {
+        this.on('input', function (msg) {
             node.logger = RED.nodes.getNode(config.logger);
 
             let loglevel = config.loglevel || '';
@@ -34,10 +34,12 @@ module.exports = function (RED) {
                     }
                 }
 
-                node.logger.addToLog(level, msg);
+                try {
+                    node.logger.addToLog(level, msg);
+                } catch (err) {
+                    node.error(err);
+                }
             }
-
-            if (done) done();
         });
     }
 
