@@ -10,6 +10,7 @@ nodered/package.json
 nodered/*flows.json.backup
 nodered/*cred.json.backup
 nodered/.config*
+.processcube/nodered/**.backup
 
 
 # Logs

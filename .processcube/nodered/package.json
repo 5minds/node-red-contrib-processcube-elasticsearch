@@ -1,0 +1,13 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@flowfuse/node-red-dashboard": "1.22.0",
+        "passport-oauth2": "*",
+        "jsonwebtoken": "*",
+        "jwks-rsa": "*",
+        "node-red-contrib-oauth2": "*"
+    }
+}
