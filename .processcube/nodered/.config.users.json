@@ -33,6 +33,9 @@
             "tours": {
                 "welcome": "4.0.8"
             }
+        },
+        "do": {
+            "markNodes": true
         }
     }
 }

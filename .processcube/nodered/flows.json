@@ -104,11 +104,12 @@
             "bb866b012afbc73c",
             "860403e22a1eeb2d",
             "209b9637f58048f7",
-            "59b75b9850eb2758"
+            "59b75b9850eb2758",
+            "35456f8a5ac9b1b9"
         ],
         "x": 34,
         "y": 559,
-        "w": 532,
+        "w": 692,
         "h": 142
     },
     {
@@ -444,13 +445,13 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"name\":\"ProcessCube\",\"since\":2009,\"email\":\"processcube@5minds.de\"}",
+        "payload": "{\"message\":\"hello world\",\"messageTemplate\":\"a messageTemplate\",\"meta\":{\"message\":\"a message\",\"messageTemplate\":\"a messageTemplate\",\"severity\":\"a severity\",\"level\":\"a level\",\"fields\":{\"firstField\":\"a FirstField\",\"secondField\":\"a SecondField\"},\"transaction.id\":\"a transaction.id\",\"trace.id\":\"a trace.id\",\"span.id\":\"a span.id\"}}",
         "payloadType": "json",
         "x": 130,
         "y": 660,
         "wires": [
             [
-                "860403e22a1eeb2d"
+                "35456f8a5ac9b1b9"
             ]
         ]
     },
@@ -478,7 +479,7 @@
                 "valueValue": "application/json"
             }
         ],
-        "x": 290,
+        "x": 450,
         "y": 660,
         "wires": [
             [
@@ -499,7 +500,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 460,
+        "x": 620,
         "y": 660,
         "wires": []
     },
@@ -586,6 +587,27 @@
         "x": 170,
         "y": 780,
         "wires": []
+    },
+    {
+        "id": "35456f8a5ac9b1b9",
+        "type": "function",
+        "z": "7981e8890a543dd5",
+        "g": "2c10f13d9bc5da5d",
+        "name": "create msg",
+        "func": "msg.payload = {\n    \"message\": \"hello world\",\n    \"messageTemplate\": \"a messageTemplate\",\n    \"meta\": {\n        \"message\": \"a message\",\n        \"messageTemplate\": \"a messageTemplate\",\n        \"severity\": \"a severity\",\n        \"level\": \"a level\",\n        \"fields\": {\n            \"firstField\": \"a FirstField\",\n            \"secondField\": \"a SecondField\"\n        },\n        \"transaction.id\": \"a transaction.id\",\n        \"trace.id\": \"a trace.id\",\n        \"span.id\": \"a span.id\"\n    }\n};\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 660,
+        "wires": [
+            [
+                "860403e22a1eeb2d"
+            ]
+        ]
     },
     {
         "id": "0b2f670fec931f5f",

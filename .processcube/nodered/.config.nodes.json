@@ -456,5 +456,35 @@
                 "file": "/usr/src/node-red/node_modules/@5minds/node-red-contrib-processcube-elasticsearch/elastic-search-logger.js"
             }
         }
+    },
+    "do-red": {
+        "name": "do-red",
+        "version": "1.0.7",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "do": {
+                "name": "do",
+                "types": [
+                    "do"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "do-red",
+                "file": "/data/node_modules/do-red/src/do.js"
+            },
+            "do-return": {
+                "name": "do-return",
+                "types": [
+                    "do-return"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "do-red",
+                "file": "/data/node_modules/do-red/src/do-return.js"
+            }
+        }
     }
 }
