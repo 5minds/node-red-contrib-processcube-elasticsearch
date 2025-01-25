@@ -24,7 +24,6 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
-     # - ELASTIC_PASSWORD=myelasticpassword
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
@@ -33,10 +32,26 @@ services:
       - es_data:/usr/share/elasticsearch/data
     restart: always
 
+  apm-server:
+    image: elastic/apm-server:8.16.3
+    container_name: apm-server
+    environment:
+      - output.elasticsearch.hosts=["http://elasticsearch:9200"]
+      - apm-server.host=0.0.0.0:8200
+      - apm-server.enable=true
+      - apm-server.instrumentation.enabled=true
+      - apm-server.instrumentation.otlp.enabled=true # Aktiviert OpenTelemetry
+      - apm-server.instrumentation.otlp.http.endpoint=/v1/traces    
+    ports:
+      - "8200:8200" # OpenTelemetry-Endpunkt
+    depends_on:
+      - elasticsearch
+
   kibana:
     image: kibana:8.16.3
     container_name: kibana
     environment:
+      - xpack.security.enabled=false
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
       - "5601:5601"

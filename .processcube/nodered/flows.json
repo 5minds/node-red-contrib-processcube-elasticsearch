@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "4d4b126d45321059",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "d35cb40208b209e1",
         "type": "group",
         "z": "7981e8890a543dd5",
@@ -544,7 +552,7 @@
         "method": "GET",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "http://elasticsearch:9200/my-index/_search",
+        "url": "http://elasticsearch:9200/_search",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -741,6 +749,24 @@
         "info": "",
         "x": 140,
         "y": 300,
+        "wires": []
+    },
+    {
+        "id": "cb17b4b12c08ea24",
+        "type": "OpenTelemetry",
+        "z": "53b75a173ac5abcc",
+        "name": "",
+        "url": "http://apm-server:8200/v1/traces ",
+        "serviceName": "Node-RED",
+        "protocol": "proto",
+        "rootPrefix": "apm",
+        "timeout": 10,
+        "ignoredTypes": "debug,catch",
+        "propagateHeadersTypes": "",
+        "isLogging": true,
+        "attributeMappings": [],
+        "x": 140,
+        "y": 620,
         "wires": []
     }
 ]
