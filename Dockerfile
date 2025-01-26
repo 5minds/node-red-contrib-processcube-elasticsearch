@@ -9,6 +9,9 @@ RUN cd /package_src/ && npm install
 
 RUN npm install /package_src/
 
+# test pckages
+RUN npm install do-red
+
 # defaults
 USER node-red
 

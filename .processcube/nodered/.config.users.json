@@ -24,7 +24,7 @@
                 "view-store-position": false,
                 "view-show-grid": true,
                 "view-snap-grid": true,
-                "view-grid-size": 20,
+                "view-grid-size": "20",
                 "view-node-status": true,
                 "view-node-show-label": true,
                 "view-show-tips": true,
@@ -32,7 +32,18 @@
             },
             "tours": {
                 "welcome": "4.0.8"
+            },
+            "dialog": {
+                "export": {
+                    "pretty": true,
+                    "json-view": false
+                }
             }
-        }
+        },
+        "do": {
+            "markNodes": true
+        },
+        "menu-menu-item-sidebar": true,
+        "menu-menu-item-palette": false
     }
 }

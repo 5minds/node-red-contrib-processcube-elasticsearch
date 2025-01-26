@@ -1,6 +1,6 @@
 {
     "name": "@5minds/node-red-contrib-processcube-elasticsearch",
-    "version": "0.4.0",
+    "version": "1.0.0",
     "license": "MIT",
     "description": "Node-RED nodes for Elasticsearch",
     "scripts": {
@@ -35,10 +35,6 @@
             "elastic-search-logger": "elastic-search-logger.js"
         },
         "examples": "examples"
-    },
-    "dependencies": {
-        "winston": "^3.17.0",
-        "winston-elasticsearch": "^0.19.0"
     },
     "keywords": [
         "node-red",

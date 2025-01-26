@@ -5,9 +5,11 @@
     "private": true,
     "dependencies": {
         "@flowfuse/node-red-dashboard": "1.22.0",
-        "passport-oauth2": "*",
+        "do-red": "~1.0.7",
         "jsonwebtoken": "*",
         "jwks-rsa": "*",
-        "node-red-contrib-oauth2": "*"
+        "node-red-contrib-oauth2": "*",
+        "node-red-contrib-opentelemetry": "~1.6.2",
+        "passport-oauth2": "*"
     }
 }

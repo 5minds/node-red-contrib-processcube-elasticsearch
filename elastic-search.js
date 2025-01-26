@@ -6,11 +6,45 @@ module.exports = function (RED) {
     const Information = 'Information';
     const Debug = 'Debug';
 
+    function mapMessage(msg) {
+        const transformed = {};
+
+        transformed['@timestamp'] = msg.payload.timestamp ? msg.timestamp : new Date().toISOString();
+        transformed.message = msg.payload.message;
+        transformed.messageTemplate = msg.payload.messageTemplate;
+        transformed.severity = msg.payload.level;
+        transformed.level = msg.payload.level;
+        let meta = msg.payload.meta;
+
+        if (meta['transaction.id']) {
+            transformed.transaction = { id: meta['transaction.id'] };
+
+            delete meta['transaction.id'];
+        }
+
+        if (msg.payload.meta['trace.id']) {
+            transformed.trace = { id: meta['trace.id'] };
+
+            delete meta['trace.id'];
+        }
+
+        if (msg.payload.meta['span.id']) {
+            transformed.span = { id: meta['span.id'] };
+
+            delete meta['span.id'];
+        }
+
+        transformed.fields = meta;
+
+        return transformed;
+    }
+
+
     function LogElasticNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        this.on('input', function (msg) {
+        this.on('input', async function (msg) {
             node.logger = RED.nodes.getNode(config.logger);
 
             let loglevel = config.loglevel || '';
@@ -35,7 +69,14 @@ module.exports = function (RED) {
                 }
 
                 try {
-                    node.logger.addToLog(level, msg);
+
+                    const mappedMessage = mapMessage(msg);
+
+                    const result = await node.logger.addToLog(mappedMessage);
+
+                    msg.payload = result;
+
+                    node.send(msg);
                 } catch (err) {
                     node.error(err);
                 }
