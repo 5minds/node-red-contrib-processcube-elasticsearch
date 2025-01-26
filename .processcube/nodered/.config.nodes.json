@@ -429,7 +429,7 @@
     },
     "@5minds/node-red-contrib-processcube-elasticsearch": {
         "name": "@5minds/node-red-contrib-processcube-elasticsearch",
-        "version": "0.4.0",
+        "version": "1.0.0",
         "local": false,
         "user": false,
         "nodes": {

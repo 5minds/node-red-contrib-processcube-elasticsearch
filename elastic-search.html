@@ -17,7 +17,7 @@
       }
     },
     inputs: 1,
-    outputs: 0,
+    outputs: 1,
     icon: "file.svg",
     align: "right",
     label: function () {
@@ -100,15 +100,20 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="elastic-search">
-    <p>A logging node for Elastic Search using the winston and winston-elastic logging libraries</p>
-    <h3>Details</h3>
-    <p>Output <code>msg.payload</code> (or <code>msg.&lt;custom path&gt;</code>) or complete <code>msg</code> is used as input of the logged message.</p>
-    <p>The Log Level (Error, Warning, Information, Debug) used can be configured in the node or can be set
-    by <code>msg.loglevel</code> (or <code>msg.&lt;custom path&gt;</code>). 
-    If the content is not one of ('Error', 'Warning', 'Information', 'Debug'), 'Debug' will be used as fallback</p>
-    <p>If <code>msg.meta</code> is set, the meta info Object will be added to the file and ElasticSearch output as a JSON string.</p>
+<script type="text/markdown" data-help-name="elastic-search">
+Sending Data to the Elastic Search.
 
-    <h3>References</h3>
-    <p>This node is based on parts of node-red-contrib-advance-logger</p>
-</script>
+## Inputs
+
+: payload (object) : Will mapped to the record for elastic and meta-data are mapped to the key `fields`
+
+## Outputs
+
+: payload (string) : The result of the elastic call.
+
+
+### References
+
+-  [The ProcessCube&copy; Developer Network](https://processcube.io) - All documentation for the ProcessCube&copy; platform
+-  [ProcessCube&copy; LowCode Integration](https://processcube.io/docs/node-red) - LowCode integration in ProcessCube&copy;
+  </script>
