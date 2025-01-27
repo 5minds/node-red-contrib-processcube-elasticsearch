@@ -1,25 +1,7 @@
 'use strict';
 
-const winston = require('winston');
-const winstonElasticSearch = require('winston-elasticsearch');
-
-// TODO: MM winston-elasticsearch/index.js#112 wird die log als async function deklariert, 
-// aber nicht als async aufgerufen
-process.on('unhandledRejection', (reason, promise) => {
-    console.error(`Unhandled Rejection at ${promise} reason: ${reason}`, {});
-});    
-
 module.exports = function (RED) {
-    
-    const logLevels = {
-        levels: {
-            Error: 0,
-            Warning: 1,
-            Information: 2,
-            Debug: 3
-        }
-    };
-    
+        
     function raiseErrorAndSetNodeStatus(node, message) {
         node.error(message, {});
         node.status({
