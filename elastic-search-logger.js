@@ -2,6 +2,16 @@
 
 module.exports = function (RED) {
         
+    function removeLastSlash(str) {
+        // Überprüfen, ob das letzte Zeichen ein '/' ist
+        if (str.endsWith('/')) {
+          // Das letzte Zeichen entfernen
+          return str.slice(0, -1);
+        }
+        // Wenn kein '/' am Ende ist, den String unverändert zurückgeben
+        return str;
+      }
+
     function raiseErrorAndSetNodeStatus(node, message) {
         node.error(message, {});
         node.status({
@@ -41,7 +51,12 @@ module.exports = function (RED) {
         }
 
         if (url) {
-            node._url = `${url}/${index}/_doc`;
+
+            const finalUrl = removeLastSlash(url);
+
+            node._url = `${finalUrl}/${index}/_doc`;
+
+            RED.log.info(`Using elastic url: ${node._url}`);
 
             if (user && password) {
                 node._credentials = Buffer.from(`${user}:${password}`).toString('base64');
