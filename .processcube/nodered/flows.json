@@ -154,11 +154,12 @@
             "443b329ab591c4dd",
             "f4a0d7de5d04c121",
             "946add545fa1db9f",
-            "0c15060915aac994"
+            "0c15060915aac994",
+            "e24afd410636eb66"
         ],
         "x": 34,
         "y": 19,
-        "w": 372,
+        "w": 552,
         "h": 202
     },
     {
@@ -188,7 +189,7 @@
         "id": "e8672d361683672d",
         "type": "elastic-search-logger",
         "name": "Docker compose",
-        "url": "http://elasticsearch:9200",
+        "url": "http://elasticsearch:9200/",
         "urlType": "str",
         "usernameType": "str",
         "passwordType": "str",
@@ -621,7 +622,9 @@
         "x": 300,
         "y": 120,
         "wires": [
-            []
+            [
+                "e24afd410636eb66"
+            ]
         ]
     },
     {
@@ -745,6 +748,23 @@
         "info": "",
         "x": 140,
         "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e24afd410636eb66",
+        "type": "debug",
+        "z": "53b75a173ac5abcc",
+        "g": "38edcaecf5968ff5",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 120,
         "wires": []
     }
 ]
